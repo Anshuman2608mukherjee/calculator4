@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            background-color: floralwhite;
+            background-size: cover;
+            background-position: center;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            width: 400px;
+            padding: 10px;
+            border: 2px solid #0f0f0f;
+        }
+
+        #display {
+            width: 90%;
+            margin-bottom: 10px;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 7px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+        }
+    </style>
+
+</head>
+
+<script>
+    let expression = ''; // Initialize expression variable
+
+    function appendNumber(num) {
+        expression += num;
+        document.getElementById('display').value = expression;
+    }
+
+    function appendOperator(operator) {
+        if (expression !== '') {
+            if (!isOperator(expression.charAt(expression.length - 1))) {
+                expression += operator;
+                updateDisplay();
+            }
+        }
+    }
+
+    function appendDecimal() {
+        if (!expression.includes('.')) {
+            expression += '.';
+            updateDisplay();
+        }
+    }
+
+    function appendPercentage() {
+        if (!isNaN(expression.charAt(expression.length - 1))) {
+            expression += '/100';
+            updateDisplay();
+        }
+    }
+
+    function appendDoubleZero() {
+        if (expression !== '') {
+            expression += '00';
+            updateDisplay();
+        }
+    }
+
+    function backspace() {
+        expression = expression.slice(0, -1);
+        updateDisplay();
+    }
+
+    function clearDisplay() {
+        expression = '';
+        document.getElementById('display').value = expression;
+    }
+
+    function calculate() {
+        try {
+            let result = eval(expression);
+            if (result !== undefined) {
+                expression = result.toString();
+                document.getElementById('display').value = expression;
+            } else {
+                throw new Error('Invalid Expression');
+            }
+        } catch (error) {
+            document.getElementById('display').value = 'Error';
+        }
+    }
+
+    function updateDisplay() {
+        document.getElementById('display').value = expression;
+    }
+
+    function isOperator(char) {
+        return ['+', '-', '*', '/'].includes(char);
+    }
+</script>
+
+<body>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <div class="buttons">
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="backspace()">←</button>
+            <button onclick="appendPercentage()">%</button>
+            <button onclick="appendOperator('/')">/</button>
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button onclick="appendOperator('*')">*</button>
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button onclick="appendOperator('-')">-</button>
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button onclick="appendOperator('+')">+</button>
+            <button onclick="appendDecimal()">.</button>
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="appendDoubleZero()">00</button>
+            <button onclick="calculate()">=</button>
+        </div>
+    </div>
+</body>
+
+</html>
